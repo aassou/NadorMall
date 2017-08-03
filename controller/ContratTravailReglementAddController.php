@@ -1,15 +1,5 @@
-<?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+<?php 
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -24,7 +14,7 @@
         
         $reglement = new ContratTravailReglement(array('montant' => $montant, 'motif' => $motif,
         'dateReglement' => $dateReglement, 'idContratTravail' => $idContratTravail));
-        $contratTravailReglementManager = new ContratTravailReglementManager($pdo);
+        $contratTravailReglementManager = new ContratTravailReglementManager(PDOFactory::getMysqlConnection());
         $contratTravailReglementManager->add($reglement);
         $_SESSION['contrat-reglement-add-success']="<strong>تم تسجيل الدفعة المالية بنجاح</strong>";
     }

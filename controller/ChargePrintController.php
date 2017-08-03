@@ -1,22 +1,12 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav'])){
         //classes managers  
-        $projetManager = new ProjetManager($pdo);
-        $chargeManager = new ChargeManager($pdo);
-        $typeChargeManager = new TypeChargeManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+        $chargeManager = new ChargeManager(PDOFactory::getMysqlConnection());
+        $typeChargeManager = new TypeChargeManager(PDOFactory::getMysqlConnection());
         $idProjet = htmlentities($_POST['idProjet']);
         $projet = $projetManager->getProjetById($idProjet);
         $criteria = htmlentities($_POST['criteria']);

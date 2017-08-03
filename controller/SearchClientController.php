@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -25,7 +15,7 @@
 			}
 		}
 		$recherche = htmlentities($_POST['search']);
-		$clientManager = new ClientManager($pdo);
+		$clientManager = new ClientManager(PDOFactory::getMysqlConnection());
 		$_SESSION['searchClientResult'] = $clientManager->getClientBySearch($recherche, $testRadio);
 		header('Location:../clients-search.php');
     }

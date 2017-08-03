@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -22,7 +11,7 @@
     $typeMessage = "";
     $redirectLink = "";
     //Component Class Manager
-    $commandeManager = new CommandeManager($pdo);
+    $commandeManager = new CommandeManager(PDOFactory::getMysqlConnection());
 	//Action Add Processing Begin
     if($action == "add"){
         if( !empty($_POST['numeroCommande']) ){
@@ -112,7 +101,7 @@
         $mois = $_POST['mois'];
         $annee = $_POST['annee'];
         //delete commande and its details
-        $commandeDetailsManager = new CommandeDetailManager($pdo);
+        $commandeDetailsManager = new CommandeDetailManager(PDOFactory::getMysqlConnection());
         $commandeDetailsManager->deleteCommande($idCommande);
         $commandeManager->delete($idCommande);
         $actionMessage = "Opération Valide : Commande supprimé(e) avec succès.";

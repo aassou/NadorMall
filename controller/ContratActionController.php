@@ -1,26 +1,5 @@
 <?php
-/**
- * This is a Model class for the Contract Component
- * 
- * Created By : AASSOU Abdelilah
- * Date       : 03/11/2015
- * Github     : aassou
- * Twitter    : @a_aassou
- * email      : aassou.abdelilah@gmail.com
- * Description: This controller is used to create a new contract based on the customer data
- *              received form the clients-add.php url.
- */
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -44,13 +23,13 @@
     $typeMessage = "";
     $redirectLink = "";
     //class manager
-    $clientManager = new ClientManager($pdo);
-    $contratManager = new ContratManager($pdo);
-    $contratCasLibreManager = new ContratCasLibreManager($pdo);
-    $reglementPrevuManager = new ReglementPrevuManager($pdo);
-    $projetManager = new ProjetManager($pdo);
+    $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+    $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+    $contratCasLibreManager = new ContratCasLibreManager(PDOFactory::getMysqlConnection());
+    $reglementPrevuManager = new ReglementPrevuManager(PDOFactory::getMysqlConnection());
+    $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
     //process starts
     $nomProjet = $projetManager->getProjetById($idProjet)->nom();
     //Action Add Processing Begin
@@ -164,7 +143,7 @@
                     $titre = htmlentities($_POST['titre']);
                     $etat = htmlentities($_POST['etat']);
                     //load class manager
-                    $commissionManager = new CommissionManager($pdo);
+                    $commissionManager = new CommissionManager(PDOFactory::getMysqlConnection());
                     //save the commission
                     $commission = 
                         new Commission(
@@ -206,17 +185,17 @@
                 //in the next if elseif statement, we test the type of the property to change its status
                 //and its price
                 if($typeBien=="appartement"){
-                    $appartementManager = new AppartementManager($pdo);
+                    $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
                     $appartementManager->changeStatus($idBien, "Vendu");
                     $appartementManager->updatePrix($prixNegocie, $idBien);
                 }
                 else if($typeBien=="localCommercial"){
-                    $locauxManager = new LocauxManager($pdo);
+                    $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
                     $locauxManager->changeStatus($idBien, "Vendu");
                     $locauxManager->updatePrix($prixNegocie, $idBien);
                 }
                 //add contract note into db and show it in the dashboard
-                $notesClientManager = new NotesClientManager($pdo);
+                $notesClientManager = new NotesClientManager(PDOFactory::getMysqlConnection());
                 $notesClient = new NotesClient(array('note' => $note, 'created' => date('Y-m-d'), 
                 'idProjet' => $idProjet, 'codeContrat' => $codeContrat));
                 $notesClientManager->add($notesClient);
@@ -256,8 +235,8 @@
             $updatedBy = $_SESSION['userMerlaTrav']->login();
             $updated = date('Y-m-d h:i:s');
             //create classes managers
-            $locauxManager = new LocauxManager($pdo);
-            $appartementManager = new AppartementManager($pdo);
+            $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
+            $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
             //create classes
             //this contrat object is used to test the type of a property based of 
             //the id of the current contrat objet
@@ -308,7 +287,7 @@
             //add it to db
             $historyManager->add($history);
             //update client's note
-            $notesClientManager = new NotesClientManager($pdo);
+            $notesClientManager = new NotesClientManager(PDOFactory::getMysqlConnection());
             $notesClient = new NotesClient(array('note' => $note, 'created' => date('Y-m-d'), 
             'idProjet' => $contrat->idProjet(), 'codeContrat' => $contrat->code()));
             $notesClientManager->add($notesClient);
@@ -412,11 +391,11 @@
         $contrat = $contratManager->getContratById($idContrat);
         //Change status of the old contrat Bien from "Vendu" to "Disponible"
         if( $contrat->typeBien()=="appartement" ){
-            $appartementManager = new AppartementManager($pdo);
+            $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
             $appartementManager->changeStatus($contrat->idBien(), "Disponible");
         }
         else if( $contrat->typeBien()=="localCommercial" ){
-            $locauxManager = new LocauxManager($pdo);
+            $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
             $locauxManager->changeStatus($contrat->idBien(), "Disponible");
         }
         $contratManager->desisterContrat($idContrat);
@@ -447,7 +426,7 @@
         $contrat = $contratManager->getContratById($idContrat);
         //test property type to decide which action to do
         if( $contrat->typeBien() == "appartement" ){
-            $appartementManager = new AppartementManager($pdo);
+            $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
             if( $appartementManager->getAppartementById($contrat->idBien())->status() == "Disponible" ){
                 $appartementManager->changeStatus($contrat->idBien(), "Vendu");
                 $contratManager->activerContrat($idContrat);
@@ -472,7 +451,7 @@
             }
         }
         else if( $contrat->typeBien()=="localCommercial" ){
-            $locauxManager = new LocauxManager($pdo);
+            $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
             if( $locauxManager->getLocauxById($contrat->idBien())->status()=="Disponible" ){
                 $locauxManager->changeStatus($contrat->idBien(), "Vendu");
                 $contratManager->activerContrat($idContrat);
@@ -510,11 +489,11 @@
         $typeBien = $_POST['typeBien'];
         $montantRevente = $_POST['montantRevente'];
         if ( $typeBien == "appartement" ) {
-            $appartementManager = new AppartementManager($pdo);
+            $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
             $appartementManager->updateMontantRevente($montantRevente, $idBien);
         }
         else {
-            $locauxManager = new LocauxManager($pdo);
+            $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
             $locauxManager->updateMontantRevente($montantRevente, $idBien);
         }
         $contrat = $contratManager->getContratById($idContrat);

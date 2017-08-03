@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -31,7 +21,7 @@
         'dateNaissance' => $dateNaissance, 'dateContrat' => $dateContrat,
 		'adresse' => $adresse, 'matiere' => $matiere, 'prix' => $prix, 'mesure' => $mesure,
 		'prixTotal' => $prixTotal, 'idProjet' => $idProjet));
-        $contratTravailManager = new ContratTravailManager($pdo);
+        $contratTravailManager = new ContratTravailManager(PDOFactory::getMysqlConnection());
         $contratTravailManager->add($contrat);
         $_SESSION['contrat-add-success']="<strong>تم تسجيل العقد بنجاح</strong>";
     }

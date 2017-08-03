@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -50,7 +40,7 @@
         $terrain = new Terrain(array('vendeur' => $vendeur, 'prix' => $prix,'superficie' => $superficie, 
         'fraisAchat' =>$fraisAchat, 'emplacement' => $emplacement, 'idProjet' => $idProjet, 
         'created' => $created, 'createdBy' => $createdBy));
-        $terrainManager = new TerrainManager($pdo);
+        $terrainManager = new TerrainManager(PDOFactory::getMysqlConnection());
         $terrainManager->add($terrain);
         $_SESSION['terrain-add-success']="<strong>Opération valide : </strong>Le terrain est ajouté avec succès !";
     }

@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -25,10 +15,10 @@
     $redirectLink = "";
     //process begins
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
-    $livraisonManager = new LivraisonManager($pdo);
-    $fournisseurManager = new FournisseurManager($pdo);
-    $projetManager = new ProjetManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
+    $livraisonManager = new LivraisonManager(PDOFactory::getMysqlConnection());
+    $fournisseurManager = new FournisseurManager(PDOFactory::getMysqlConnection());
+    $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
     $idFournisseur = htmlentities($_POST['idFournisseur']);
     if($action == "add"){
         if( !empty($_POST['libelle']) and !empty($_POST['dateLivraison']) ){
@@ -158,7 +148,7 @@
         
     }
     else if($action=="delete"){
-        $livraisonDetailManager = new LivraisonDetailManager($pdo);
+        $livraisonDetailManager = new LivraisonDetailManager(PDOFactory::getMysqlConnection());
         $idLivraison = $_POST['idLivraison'];
         $mois = htmlentities($_POST['mois']);
         $annee = htmlentities($_POST['annee']);

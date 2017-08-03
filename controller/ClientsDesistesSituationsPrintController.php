@@ -1,27 +1,17 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) and 
     ($_SESSION['userMerlaTrav']->profil()=="admin") or ($_SESSION['userMerlaTrav']->profil()=="manager")){
         //classes managers  
         $idProjet = $_GET['idProjet'];
-        $projetManager = new ProjetManager($pdo);
-        $clientManager = new ClientManager($pdo);
-        $contratManager = new ContratManager($pdo);
-        $operationManager = new OperationManager($pdo);
-        $appartementManager = new AppartementManager($pdo);
-        $locauxManager = new LocauxManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+        $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+        $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+        $operationManager = new OperationManager(PDOFactory::getMysqlConnection());
+        $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
+        $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
         $contratNumber = $contratManager->getContratsNumberByIdProjet($idProjet);
         $contrats = $contratManager->getContratsDesistesByIdProjet($idProjet);
 ob_start();

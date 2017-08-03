@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -18,7 +8,7 @@
     if( !empty($_POST['numeroCheque']) ){
         $idReglement = htmlentities($_POST['idReglement']);
         $numeroCheque = htmlentities($_POST['numeroCheque']);
-        $reglementFournisseurManager = new ReglementFournisseurManager($pdo);
+        $reglementFournisseurManager = new ReglementFournisseurManager(PDOFactory::getMysqlConnection());
         $reglementFournisseurManager->updateNumeroCheque($numeroCheque, $idReglement);
     }
     header('Location:../fournisseurs-reglements.php?idFournisseur='.$idFournisseur.'#listFournisseurs');

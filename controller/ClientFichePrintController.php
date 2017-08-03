@@ -1,22 +1,12 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) and $_SESSION['userMerlaTrav']->profil()=="admin" ){
         //classes managers	
-        $clientManager = new ClientManager($pdo);
-        $contratManager = new ContratManager($pdo);
-        $projetManager = new ProjetManager($pdo);
+        $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+        $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
 		//classes and attributes
 		$idContrat = $_GET['idContrat'];
         $contrat = $contratManager->getContratById($idContrat);

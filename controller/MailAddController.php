@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -19,7 +9,7 @@
         $sender = $_SESSION['userMerlaTrav']->login();
         $created = date("Y-m-d H:i:s");
         $mail = new Mail(array('content' => $content, 'sender' => $sender,'created' => $created));
-        $mailManager = new MailManager($pdo);
+        $mailManager = new MailManager(PDOFactory::getMysqlConnection());
         $mailManager->add($mail);
     }
     else{

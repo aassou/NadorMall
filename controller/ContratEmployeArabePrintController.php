@@ -1,28 +1,16 @@
 <?php
-
-// Include the main TCPDF library (search for installation path).
-//classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     require_once('../lib/tcpdf/tcpdf.php');
     //classes loading end
     session_start();
     
     //classes managers
-    $contratEmployeManager = new ContratEmployeManager($pdo);
-    $companyManager = new CompanyManager($pdo);
-    $clientManager = new ClientManager($pdo);
-    $projetManager = new ProjetManager($pdo);
-    $employeManager = new EmployeManager($pdo);
+    $contratEmployeManager = new ContratEmployeManager(PDOFactory::getMysqlConnection());
+    $companyManager = new CompanyManager(PDOFactory::getMysqlConnection());
+    $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+    $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+    $employeManager = new EmployeManager(PDOFactory::getMysqlConnection());
     //classes
     $idContrat = $_GET['idContratEmploye'];
     $contrat = $contratEmployeManager->getContratEmployeById($idContrat);

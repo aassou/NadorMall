@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');  
     //classes loading end
     session_start();
@@ -23,7 +13,7 @@
 		//create class
 		$conge = new EmployeProjetConge(array('id' => $idConge, 'dateDebut' => $dateDebut, 'dateFin' => $dateFin ));
 		//create class manager
-        $congeManager = new EmployeProjetCongeManager($pdo);
+        $congeManager = new EmployeProjetCongeManager(PDOFactory::getMysqlConnection());
         $congeManager->update($conge);
 		$_SESSION['conge-update-success'] = "<strong>Opération valide : </strong>Les infos du congé sont modifiées avec succès.";
 		header('Location:../employe-projet-profile.php?idEmploye='.$idEmploye);

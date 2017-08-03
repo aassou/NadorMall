@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -24,9 +13,9 @@
     //Redirection link
     $redirectLink = "";
     //Component Class Manager
-    $contratCasLibreManager = new ContratCasLibreManager($pdo);
+    $contratCasLibreManager = new ContratCasLibreManager(PDOFactory::getMysqlConnection());
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
 	//Action Add Processing Begin
     if($action == "add"){
         if( !empty($_POST['date']) ){

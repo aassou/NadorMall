@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -24,10 +13,10 @@
     $idProjet = htmlentities($_POST['idProjet']);
 
     //Component Class Manager
-    $clientManager   = new ClientManager($pdo);
-    $projetManager   = new ProjetManager($pdo); 
-    $syndiqueManager = new SyndiqueManager($pdo);
-    $historyManager  = new HistoryManager($pdo);
+    $clientManager   = new ClientManager(PDOFactory::getMysqlConnection());
+    $projetManager   = new ProjetManager(PDOFactory::getMysqlConnection()); 
+    $syndiqueManager = new SyndiqueManager(PDOFactory::getMysqlConnection());
+    $historyManager  = new HistoryManager(PDOFactory::getMysqlConnection());
 	//Action Add Processing Begin
     if($action == "add"){
         if(!empty($_POST['date']) and !empty($_POST['idClient']) and !empty($_POST['montant'])){

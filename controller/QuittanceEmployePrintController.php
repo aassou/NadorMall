@@ -1,24 +1,14 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //classes managers  
         $idProjet = 0;
-        $projetManager = new ProjetManager($pdo);
-        $contratEmployeManager = new ContratEmployeManager($pdo);
-        $contratDetaislManager = new ContratDetailsManager($pdo);
-        $employesManager = new EmployeManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+        $contratEmployeManager = new ContratEmployeManager(PDOFactory::getMysqlConnection());
+        $contratDetaislManager = new ContratDetailsManager(PDOFactory::getMysqlConnection());
+        $employesManager = new EmployeManager(PDOFactory::getMysqlConnection());
         $contratDetails = "";
         if(isset($_GET['idContratDetail']) and ($_GET['idContratDetail'])>0 and $_GET['idContratDetail']<=$contratDetaislManager->getLastId()){
             $idProjet = $_GET['idProjet'];

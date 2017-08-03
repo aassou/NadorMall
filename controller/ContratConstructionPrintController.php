@@ -1,21 +1,11 @@
-<?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+<?php 
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //class managers
-        $companyManager = new CompanyManager($pdo);
-        $projetManager  = new ProjetManager($pdo);
+        $companyManager = new CompanyManager(PDOFactory::getMysqlConnection());
+        $projetManager  = new ProjetManager(PDOFactory::getMysqlConnection());
         //obj and vars
         $idProjet        = htmlentities($_POST['idProjet']);
         $idCompany1      = htmlentities($_POST['company1']);

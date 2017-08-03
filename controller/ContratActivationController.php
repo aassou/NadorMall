@@ -1,24 +1,14 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();    
     //post input processing
     $idProjet = $_POST['idProjet'];
 	$idContrat  = $_POST['idContrat'];
 	//create classes managers
-	$contratManager = new ContratManager($pdo);
-	$locauxManager = new LocauxManager($pdo);
-	$appartementManager = new AppartementManager($pdo);
+	$contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+	$locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
+	$appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
 	//create classes
 	$contrat = $contratManager->getContratById($idContrat);
 	$redirectLink = 'Location:../contrats-list.php?idProjet='.$idProjet;

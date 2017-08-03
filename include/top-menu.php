@@ -2,30 +2,30 @@
 	<div class="container-fluid">
 		<!-- BEGIN LOGO -->
 		<a class="brand">
-		<img src="assets/img/big-logo-new.png" alt="logo" />
+		<img src="../assets/img/big-logo-new.png" alt="logo" />
 		</a>
 		<!-- END LOGO -->
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 		<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-		<img src="assets/img/menu-toggler.png" alt="" />
+		<img src="../assets/img/menu-toggler.png" alt="" />
 		</a>          
 		<!-- END RESPONSIVE MENU TOGGLER -->				
 		<!-- BEGIN TOP NAVIGATION MENU -->		
 		<?php
 		//In this section we will count the number of tasks assigned to the current session user
 		//classes managers
-		$bugManager = new BugManager($pdo);
-		$taskManager = new TaskManager($pdo);
-        $alertManager = new AlertManager($pdo);
-        $todoManager = new TodoManager($pdo);
+		$bugManager   = new BugManager(PDOFactory::getMysqlConnection());
+		$taskManager  = new TaskManager(PDOFactory::getMysqlConnection());
+        $alertManager = new AlertManager(PDOFactory::getMysqlConnection());
+        $todoManager  = new TodoManager(PDOFactory::getMysqlConnection());
         //obj and vars
-        $taskNumber = $taskManager->getTaskNumberByUser($_SESSION['userMerlaTrav']->login());
-        $bugNumber = $bugManager->getBugsNumber();
-        $alertNumber = $alertManager->getAlertsNumber($_SESSION['userMerlaTrav']->login());
-        $todoNumber = $todoManager->getTodosNumberByUser($_SESSION['userMerlaTrav']->login());
-        $todosToday = $todoManager->getTodosToday();
+        $taskNumber            = $taskManager->getTaskNumberByUser($_SESSION['userMerlaTrav']->login());
+        $bugNumber             = $bugManager->getBugsNumber();
+        $alertNumber           = $alertManager->getAlertsNumber($_SESSION['userMerlaTrav']->login());
+        $todoNumber            = $todoManager->getTodosNumberByUser($_SESSION['userMerlaTrav']->login());
+        $todosToday            = $todoManager->getTodosToday();
         $todosTodayInformation = $todoManager->getTodosTodayInformation();
-        $todosOld = $todoManager->getTodosOld();
+        $todosOld              = $todoManager->getTodosOld();
 		?>			
 		<ul class="nav pull-right">
 		    <li class="dropdown" id="header_inbox_bar">

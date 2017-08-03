@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
 	
@@ -18,7 +8,7 @@
 		if($_POST['newPassword1']==$_POST['newPassword2']){
 			$newPassword = htmlentities($_POST['newPassword1']);
 			$idUser = $_SESSION['userMerlaTrav']->id();
-			$userManager = new UserManager($pdo);
+			$userManager = new UserManager(PDOFactory::getMysqlConnection());
 			$userManager->changePassword($newPassword, $idUser);
 			$_SESSION['password-update-success']="<strong>Opération valide</strong> : Le mot de passe a été changé avec succès.";
 		}

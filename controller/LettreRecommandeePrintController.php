@@ -1,27 +1,15 @@
 <?php
-
-// Include the main TCPDF library (search for installation path).
-//classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     require_once('../lib/tcpdf/tcpdf.php');
     //classes loading end
     session_start();
     
     //classes managers
-    $contratManager = new ContratManager($pdo);
-    $companyManager = new CompanyManager($pdo);
-    $clientManager  = new ClientManager($pdo);
-    $projetManager  = new ProjetManager($pdo);
+    $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+    $companyManager = new CompanyManager(PDOFactory::getMysqlConnection());
+    $clientManager  = new ClientManager(PDOFactory::getMysqlConnection());
+    $projetManager  = new ProjetManager(PDOFactory::getMysqlConnection());
     //objects
     $idContrat = $_GET['idContrat'];
     $contrat   = $contratManager->getContratById($idContrat);
@@ -37,7 +25,7 @@
     $articleReservation = "";
     $articleRevente = "";
     if ( $contrat->typeBien() == "appartement" ) {
-        $appartementManager = new AppartementManager($pdo);
+        $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
         $bien = $appartementManager->getAppartementById($contrat->idBien());
         $typeBien = "شقة";
         if ( $bien->cave() == "Avec" ) {
@@ -51,7 +39,7 @@
         $articleRevente = "و اوافق للشركة المذكورة أعلاه أن تتصرف في الشقة التي سبق أن حفظت حقي في شرائها.";
     }
     else if ( $contrat->typeBien() == "localCommercial" ) {
-        $locauxManager = new LocauxManager($pdo);
+        $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
         $bien = $locauxManager->getLocauxById($contrat->idBien());
         $typeBien = "محل تجاري";
         $etage = "الطابق الأرضي";

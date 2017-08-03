@@ -1,23 +1,13 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //classes managers  
-        $projetManager = new ProjetManager($pdo);
-        $clientManager = new ClientManager($pdo);
-        $contratManager = new ContratManager($pdo);
-        $locauxManager = new LocauxManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+        $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+        $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+        $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
         //objs and vars
         $idProjet = $_GET['idProjet'];
         $projet = $projetManager->getProjetById($idProjet);

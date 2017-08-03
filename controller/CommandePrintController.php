@@ -1,31 +1,21 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
-        $projetManager = new ProjetManager($pdo);
-        $fournisseurManager = new FournisseurManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+        $fournisseurManager = new FournisseurManager(PDOFactory::getMysqlConnection());
         $commandeManager = "";
         $commandeDetailManager = "";
         //get societe value
         $societe = $_GET['societe'];
         if ( $societe == 2 ) {
-            $commandeManager = new CommandeManager($pdo);
-            $commandeDetailManager = new CommandeDetailManager($pdo);    
+            $commandeManager = new CommandeManager(PDOFactory::getMysqlConnection());
+            $commandeDetailManager = new CommandeDetailManager(PDOFactory::getMysqlConnection());    
         }
         else if ( $societe == 1 ) {
-            $commandeManager = new CommandeAnnahdaManager($pdo);
-            $commandeDetailManager = new CommandeDetailAnnahdaManager($pdo);
+            $commandeManager = new CommandeAnnahdaManager(PDOFactory::getMysqlConnection());
+            $commandeDetailManager = new CommandeDetailAnnahdaManager(PDOFactory::getMysqlConnection());
         }
         //classes and vars
         $livraisonDetailNumber = 0;

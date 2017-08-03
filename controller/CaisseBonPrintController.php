@@ -1,20 +1,10 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         $idCaisse = $_GET['idCaisse'];
-        $caisseManager = new CaisseManager($pdo);
+        $caisseManager = new CaisseManager(PDOFactory::getMysqlConnection());
         $caisse = $caisseManager->getCaisseById($idCaisse);
 ob_start();
 ?>

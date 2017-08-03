@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -21,8 +11,8 @@
     $typeMessage   = "";
     $redirectLink  = "";
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
-    $projetManager  = new ProjetManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
+    $projetManager  = new ProjetManager(PDOFactory::getMysqlConnection());
     
     if($action == "add"){
         if( !empty($_POST['nom']) && !empty($_POST['adresse']) 

@@ -1,16 +1,5 @@
 <?php
-
-//classes loading begin
-function classLoad ($myClass) {
-    if(file_exists('../model/'.$myClass.'.php')){
-        include('../model/'.$myClass.'.php');
-    }
-    elseif(file_exists('../controller/'.$myClass.'.php')){
-        include('../controller/'.$myClass.'.php');
-    }
-}
-spl_autoload_register("classLoad");
-include("../db/dbconf.php");
+include('../app/classLoad.php');  
 //classes loading end
 session_start();
 
@@ -20,7 +9,7 @@ if(empty($_POST['login']) || empty($_POST['password']) || empty($_POST['rpasswor
     $_SESSION['user-add-error'] = "<strong>Erreur Ajout Utilisateur</strong> : Tous les champs sont obligatoires";
 }
 else{
-    $userManager = new UserManager($pdo);
+    $userManager = new UserManager(PDOFactory::getMysqlConnection());
     if($userManager->exists2($_POST['login'])){
         $_SESSION['user-add-error'] = "<strong>Erreur Ajout Utilisateur</strong> : Ce login existe déjà.";
     }

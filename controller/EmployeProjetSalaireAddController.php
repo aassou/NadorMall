@@ -1,15 +1,5 @@
-<?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+<?php 
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');  
     //classes loading end
     session_start();
@@ -24,7 +14,7 @@
 		$salaire = new EmployeProjetSalaire(array('salaire' => $salaire, 'nombreJours' => $nombreJours, 
 		'dateOperation' => $dateOperation,'idEmploye' => $idEmploye ));
 		//create class manager
-        $salaireManager = new EmployeProjetSalaireManager($pdo);
+        $salaireManager = new EmployeProjetSalaireManager(PDOFactory::getMysqlConnection());
         $salaireManager->add($salaire);
 		$_SESSION['salaire-add-success'] = "<strong>Opération valide : </strong>Le salaire est ajouté avec succès.";
 		header('Location:../employe-projet-profile.php?idEmploye='.$idEmploye);

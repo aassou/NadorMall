@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -23,7 +12,7 @@
 
     //Component Class Manager
 
-    $clientAttenteManager = new ClientAttenteManager($pdo);
+    $clientAttenteManager = new ClientAttenteManager(PDOFactory::getMysqlConnection());
 	//Action Add Processing Begin
     if($action == "add"){
         if( !empty($_POST['nom']) ){

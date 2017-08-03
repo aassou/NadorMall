@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');  
     //classes loading end
     session_start();
@@ -32,7 +22,7 @@
 		}
 		$employe = new EmployeProjet(array('id' => $idEmploye, 'nom' => $nom, 'cin' => $cin, 'etatCivile' => $etatCivile,'telephone' => $telephone, 
         'photo' =>$photo, 'email' => $email, 'dateDebut' => $dateDebut, 'dateSortie' => $dateSortie));
-        $employeManager = new EmployeProjetManager($pdo);
+        $employeManager = new EmployeProjetManager(PDOFactory::getMysqlConnection());
         $employeManager->update($employe);
 		$_SESSION['employe-update-success'] = "<strong>Opération valide : </strong>Les informations de l'employé '".$nom."' sont modifiées avec succès.";
 		$location = "employes-projet.php?idProjet=".$idProjet;

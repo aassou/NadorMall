@@ -1,25 +1,5 @@
 <?php
-/**
- * This is a Model class for the customer component
- * Created By  : AASSOU Abdelilah
- * Date        : 03/11/2015
- * Github      : @aassou
- * email       : aassou.abdelilah@gmail.com
- * Description : This controller is used to create a new customer if it doesn't exist, or get it from 
- *              the database if exists. If all goes nomrmal, this controller sends the customer 
- *              informations to the contract property url to finish the process.
- */
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -36,9 +16,9 @@
     $typeMessage = "";
     $redirectLink = "";
     //class manager
-    $clientManager = new ClientManager($pdo);
+    $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
     //process starts
     //Case 1 : CRUD Add Action 
     if($action == "add") {

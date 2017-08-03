@@ -1,21 +1,11 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //class manager
-        $projetManager = new ProjetManager($pdo);
-        $fournisseurManager = new FournisseurManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+        $fournisseurManager = new FournisseurManager(PDOFactory::getMysqlConnection());
         $livraisonManager = "";
         $livraisonDetailManager = "";
         $reglementsFournisseurManager = "";
@@ -24,9 +14,9 @@
         $societe = htmlentities($_POST['societe']);
         
         if ( $societe == 1 ) {
-            $livraisonManager = new LivraisonManager($pdo);
-            $livraisonDetailManager = new LivraisonDetailManager($pdo);
-            $reglementsFournisseurManager = new ReglementFournisseurManager($pdo);
+            $livraisonManager = new LivraisonManager(PDOFactory::getMysqlConnection());
+            $livraisonDetailManager = new LivraisonDetailManager(PDOFactory::getMysqlConnection());
+            $reglementsFournisseurManager = new ReglementFournisseurManager(PDOFactory::getMysqlConnection());
             $titreSociete = "";
         }
         //classes and vars

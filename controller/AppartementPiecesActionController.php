@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -19,7 +9,7 @@
     //This var contains result message of CRUD action
     $actionMessage = "";
     $typeMessage = "";
-    $appartementPiecesManager = new AppartementPiecesManager($pdo);
+    $appartementPiecesManager = new AppartementPiecesManager(PDOFactory::getMysqlConnection());
     $idProjet = htmlentities($_POST['idProjet']);
     $idAppartement = htmlentities($_POST['idAppartement']);
     

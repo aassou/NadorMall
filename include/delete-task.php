@@ -1,7 +1,7 @@
 <?php 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../model/TodoManager.php');
-    $todoManager = new TodoManager($pdo);
+    $todoManager = new TodoManager(PDOFactory::getMysqlConnection());
     $task_id = $_GET['idTask'];
     //mysql_query("DELETE FROM tasks WHERE id='$task_id'");
     $todoManager->delete($task_id);

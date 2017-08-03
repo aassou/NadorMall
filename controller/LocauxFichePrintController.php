@@ -1,22 +1,12 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
-        $clientManager = new ClientManager($pdo);
-        $locauxManager = new LocauxManager($pdo);
-		$contratManager = new ContratManager($pdo);
-		$projetManager = new ProjetManager($pdo);
+        $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+        $locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
+		$contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+		$projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
 		$idAppartement = 0;
 		if(isset($_GET['idLocaux']) and $_GET['idLocaux']>0 and $_GET['idLocaux']<=$locauxManager->getLastId()){
 			$idLocaux = $_GET['idLocaux'];
@@ -24,7 +14,7 @@
 	        $contrat = $contratManager->getContratByIdBien($local->id());
 	        $client = $clientManager->getClientById($contrat->idClient());
 	        $projet = $projetManager->getProjetById($contrat->idProjet());
-			$piecesLocauxManager = new PiecesLocauxManager($pdo);
+			$piecesLocauxManager = new PiecesLocauxManager(PDOFactory::getMysqlConnection());
 			$piecesNumber = $piecesLocauxManager->getPiecesLocauxNumberByIdLocaux($local->id());
 			$pieces="";
 			if($piecesNumber>0){

@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     
@@ -17,7 +7,7 @@
 	$idProjet = $_POST['idProjet'];
 	$idLivraison = $_POST['idLivraison'];
 	$idPieceLivraison = $_POST['idPieceLivraison'];   
-    $livraisonPiecesManager = new LivraisonPiecesManager($pdo);
+    $livraisonPiecesManager = new LivraisonPiecesManager(PDOFactory::getMysqlConnection());
 	$livraisonPiecesManager->delete($idPieceLivraison);
 	//delete file from the disk
 	$_SESSION['piece-delete-success'] = "<strong>Opération valide : </strong>Pièce supprimée avec succès.";

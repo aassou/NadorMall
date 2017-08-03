@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');  
     //classes loading end
     session_start();
@@ -17,7 +7,7 @@
     //post input processing
     $idProjet = htmlentities($_POST['idProjet']);
 	if( !empty($_POST['nom'])){
-		$employeManager = new EmployeProjetManager($pdo);
+		$employeManager = new EmployeProjetManager(PDOFactory::getMysqlConnection());
 		$nom = htmlentities($_POST['nom']);    
 		if( $employeManager->exists($nom) ){
 			$_SESSION['employe-add-error'] = "<strong>Erreur Ajout Employé : </strong>Un employé existe déjà avec ce nom : ".$nom.".";

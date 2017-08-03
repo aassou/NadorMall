@@ -1,27 +1,17 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //classes managers	
         $idProjet = 0;
-        $companyManager = new CompanyManager($pdo);
-    	$projetManager = new ProjetManager($pdo);
-		$clientManager = new ClientManager($pdo);
-		$contratManager = new ContratManager($pdo);
-		$operationManager = new OperationManager($pdo);
-        $contratCasLibreManager = new ContratCasLibreManager($pdo);
-        $reglementPrevuManager = new ReglementPrevuManager($pdo);
+        $companyManager = new CompanyManager(PDOFactory::getMysqlConnection());
+    	$projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+		$clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+		$contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+		$operationManager = new OperationManager(PDOFactory::getMysqlConnection());
+        $contratCasLibreManager = new ContratCasLibreManager(PDOFactory::getMysqlConnection());
+        $reglementPrevuManager = new ReglementPrevuManager(PDOFactory::getMysqlConnection());
 		if(isset($_GET['codeContrat']) and (bool)$contratManager->getCodeContrat($_GET['codeContrat']) ){
 			$codeContrat = $_GET['codeContrat'];
 			$contrat = $contratManager->getContratByCode($codeContrat);
@@ -33,13 +23,13 @@
             $typeBien = "";
 			$niveau = "";
 			if($contrat->typeBien()=="appartement"){
-				$appartementManager = new AppartementManager($pdo);
+				$appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
 				$biens = $appartementManager->getAppartementById($contrat->idBien());
                 $typeBien = "Appartement";
 				$niveau = $biens->niveau();
 			}
 			else if($contrat->typeBien()=="localCommercial"){
-				$locauxManager = new LocauxManager($pdo);
+				$locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
 				$biens = $locauxManager->getLocauxById($contrat->idBien());
                 $typeBien = "Local Commercial";
 			}

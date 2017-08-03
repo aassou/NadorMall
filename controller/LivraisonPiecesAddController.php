@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -20,7 +10,7 @@
 		$url = imageProcessing($_FILES['url'], '/pieces/pieces_livraison/');
 		$nom = htmlentities($_POST['nom']);
 		$livraisonPieces = new LivraisonPieces(array('nom'=>$nom, 'url'=>$url, 'idLivraison'=>$idLivraison));
-		$livraisonPiecesManager = new LivraisonPiecesManager($pdo);
+		$livraisonPiecesManager = new LivraisonPiecesManager(PDOFactory::getMysqlConnection());
 		$livraisonPiecesManager->add($livraisonPieces);
 		$_SESSION['pieces-add-success'] = "<strong>Opération valide : </strong>La pièce a été ajoutée avec succès.";
 		header('Location:../livraisons-list.php?idProjet='.$idProjet);

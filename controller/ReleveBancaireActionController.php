@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     /****** Include the EXCEL Reader Factory ***********/
     //error_reporting(0);
@@ -24,7 +13,7 @@
     $actionMessage = "";
     $typeMessage = "";
     //Component Class Manager
-    $releveBancaireManager = new ReleveBancaireManager($pdo);
+    $releveBancaireManager = new ReleveBancaireManager(PDOFactory::getMysqlConnection());
     $redirectLink = "";
 	//Action Add Processing Begin
     if($action == "add"){
@@ -91,7 +80,7 @@
                     //print_r(utf8_decode($string));
                     //echo $string;
                     //mysql_query($string); // Insert all the data into one query
-                    $pdo->query($string);
+                    PDOFactory::getMysqlConnection()->query($string);
                     $actionMessage = "<strong>Opération Valide</strong> : Releve Bancaire Ajouté(e) avec succès.";  
                     $typeMessage = "success";
                 }
@@ -151,7 +140,7 @@
         $dateOperation = $dateOperation->format('Y-m-d'); 
         $designation = htmlentities($_POST['designation']);
         if ( $destinations == "ChargesCommuns" ) {
-            $chargeCommunManager = new ChargeCommunManager($pdo);
+            $chargeCommunManager = new ChargeCommunManager(PDOFactory::getMysqlConnection());
             $societe = htmlentities($_POST['societe']);
             $type = htmlentities($_POST['typeChargesCommuns']);
             $createdBy = $_SESSION['userMerlaTrav']->login();
@@ -171,7 +160,7 @@
             $releveBancaireManager->hide($idReleveBancaire);
         }
         else if ( $destinations == "ChargesProjets" ) {
-            $chargeManager = new ChargeManager($pdo);
+            $chargeManager = new ChargeManager(PDOFactory::getMysqlConnection());
             $societe = htmlentities($_POST['societe2']);
             $type = htmlentities($_POST['typeChargesProjet']);
             $projet = htmlentities($_POST['projet']);
@@ -218,7 +207,7 @@
             $typeMessage = "success";
         }
         else{
-            $operationManager = new OperationManager($pdo);
+            $operationManager = new OperationManager(PDOFactory::getMysqlConnection());
             //$reference = 'Q'.date('Ymd-his');
             $reference = htmlentities($_POST['reference']);
             $modePaiement = htmlentities($_POST['mode-paiement']);

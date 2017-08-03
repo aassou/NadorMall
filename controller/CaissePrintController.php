@@ -1,20 +1,10 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //classes managers  
-        $projetManager = new ProjetManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
         $caisseManager = "";
         $projets = $projetManager->getProjets();
         $titre = "";
@@ -23,7 +13,7 @@
         $totalCaisse = 0;
         $societe = htmlentities($_POST['societe']);
         if ( $societe == 1 ) {
-            $caisseManager = new CaisseManager($pdo);
+            $caisseManager = new CaisseManager(PDOFactory::getMysqlConnection());
         }
         
         $criteria = htmlentities($_POST['criteria']);

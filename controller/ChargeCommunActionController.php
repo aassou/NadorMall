@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -22,10 +11,10 @@
     $typeMessage = "";
 
     //Component Class Manager
-    $chargeManager = new ChargeCommunManager($pdo);
-    $typeChargeManager = new TypeChargeCommunManager($pdo);
+    $chargeManager = new ChargeCommunManager(PDOFactory::getMysqlConnection());
+    $typeChargeManager = new TypeChargeCommunManager(PDOFactory::getMysqlConnection());
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
 	//Action Add Processing Begin
     //begin process: test the action
     //Action Add Processing Begin

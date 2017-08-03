@@ -1,16 +1,5 @@
 <?php
-
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -21,7 +10,7 @@
     $actionMessage = "";
     $typeMessage = "";
     //Component Class Manager
-    $parkingManager = new ParkingManager($pdo);
+    $parkingManager = new ParkingManager(PDOFactory::getMysqlConnection());
     //obj and vars
     $idProjet = htmlentities($_POST['idProjet']);
 	//Action Add Processing Begin

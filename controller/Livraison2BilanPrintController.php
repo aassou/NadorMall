@@ -1,25 +1,15 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
-        $projetManager = new ProjetManager($pdo);
-		$fournisseurManager = new FournisseurManager($pdo);
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+		$fournisseurManager = new FournisseurManager(PDOFactory::getMysqlConnection());
 		$societe = $_GET['societe'];
 		if ( $societe == 1 ) {
-		    $livraisonManager = new LivraisonManager($pdo);
-            $livraisonDetailManager = new LivraisonDetailManager($pdo);
-            $reglementsFournisseurManager = new ReglementFournisseurManager($pdo);
+		    $livraisonManager = new LivraisonManager(PDOFactory::getMysqlConnection());
+            $livraisonDetailManager = new LivraisonDetailManager(PDOFactory::getMysqlConnection());
+            $reglementsFournisseurManager = new ReglementFournisseurManager(PDOFactory::getMysqlConnection());
 			$livraisonNumber = $livraisonManager->getLivraisonNumber();
 			if($livraisonNumber != 0){
 				$titreLivraison ="Bilan des livraisons et réglements";
@@ -29,9 +19,9 @@
 			}	
 		}
         else if ( $societe == 2 ) {
-            $livraisonManager = new LivraisonIaazaManager($pdo);
-            $livraisonDetailManager = new LivraisonDetailIaazaManager($pdo);
-            $reglementsFournisseurManager = new ReglementFournisseurIaazaManager($pdo);
+            $livraisonManager = new LivraisonIaazaManager(PDOFactory::getMysqlConnection());
+            $livraisonDetailManager = new LivraisonDetailIaazaManager(PDOFactory::getMysqlConnection());
+            $reglementsFournisseurManager = new ReglementFournisseurIaazaManager(PDOFactory::getMysqlConnection());
             $livraisonNumber = $livraisonManager->getLivraisonNumber();
             if($livraisonNumber != 0){
                 $titreLivraison ="Bilan des livraisons et réglements - Société Iaaza";

@@ -1,15 +1,5 @@
 <?php
-//classes loading begin
-function classLoad ($myClass) {
-    if(file_exists('../model/'.$myClass.'.php')){
-        include('../model/'.$myClass.'.php');
-    }
-    elseif(file_exists('../controller/'.$myClass.'.php')){
-        include('../controller/'.$myClass.'.php');
-    }
-}
-spl_autoload_register("classLoad");
-include("../db/dbconf.php");
+include('../app/classLoad.php');  
 //classes loading end
 session_start();
 
@@ -20,7 +10,7 @@ $abdelghani = 9;
 $hamid = 10;
 $aassou = 11;
 //process
-$userManager = new UserManager($pdo);
+$userManager = new UserManager(PDOFactory::getMysqlConnection());
 
 $userManager->changeStatus(1, $ilham);
 $userManager->changeStatus(1, $laila);

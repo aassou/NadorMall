@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');
     //classes loading end
     session_start();
@@ -20,7 +10,7 @@
 		$url = imageProcessing($_FILES['url'], '/pieces/pieces_terrain/');
 		$nom = htmlentities($_POST['nom']);
 		$pieceTerrain = new PiecesTerrain(array('nom'=>$nom, 'url'=>$url, 'idTerrain'=>$idTerrain));
-		$pieceTerrainManager = new PiecesTerrainManager($pdo);
+		$pieceTerrainManager = new PiecesTerrainManager(PDOFactory::getMysqlConnection());
 		$pieceTerrainManager->add($pieceTerrain);
 		$_SESSION['pieces-add-success'] = "<strong>Opération valide : </strong>La pièce a été ajouté avec succès.";
 		header('Location:../terrain.php?idProjet='.$idProjet.'#listTerrain');

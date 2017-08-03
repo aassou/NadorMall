@@ -1,26 +1,16 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
-        $fournisseurManager = new FournisseurManager($pdo);
-		$projetManager = new ProjetManager($pdo);
-		$livraisonManager = new LivraisonManager($pdo);
+        $fournisseurManager = new FournisseurManager(PDOFactory::getMysqlConnection());
+		$projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+		$livraisonManager = new LivraisonManager(PDOFactory::getMysqlConnection());
 		$idFournisseur = 0;
     	if( isset($_GET['idFournisseur']) and 
     	($_GET['idFournisseur']>0 and $_GET['idFournisseur']<=$fournisseurManager->getLastId()) ){
     		$idFournisseur = $_GET['idFournisseur'];
-    		$reglementsManager = new ReglementFournisseurManager($pdo);
+    		$reglementsManager = new ReglementFournisseurManager(PDOFactory::getMysqlConnection());
 			$reglementNumber = $reglementsManager->getReglementsNumberByIdFournisseurOnly($idFournisseur);
 			$reglements = $reglementsManager->getReglementFournisseursByIdFournisseur($idFournisseur);
 			$total = $reglementsManager->getTotalReglementByIdFournisseur($idFournisseur);

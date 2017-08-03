@@ -1,25 +1,15 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     //classes loading end
     session_start();
     if( isset($_SESSION['userMerlaTrav']) ){
         //classes managers	
-        $clientManager = new ClientManager($pdo);
-        $contratManager = new ContratManager($pdo);
-        $projetManager = new ProjetManager($pdo);
-		$operationManager = new OperationManager($pdo);
-        $appartementManager = new AppartementManager($pdo);
-		$locauxManager = new LocauxManager($pdo);
+        $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+        $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
+        $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+		$operationManager = new OperationManager(PDOFactory::getMysqlConnection());
+        $appartementManager = new AppartementManager(PDOFactory::getMysqlConnection());
+		$locauxManager = new LocauxManager(PDOFactory::getMysqlConnection());
 		//classes and attributes
 		$bien = "";
 		$idOperation = $_GET['idOperation'];

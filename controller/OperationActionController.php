@@ -1,15 +1,5 @@
 <?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');  
+    include('../app/classLoad.php');  
     include('../lib/image-processing.php');
     include('../lib/ForeignExchange.php');
     //classes loading end
@@ -26,11 +16,11 @@
     $redirectLink = "";
     //process begins
     //The History Component is used in all ActionControllers to mention a historical version of each action
-    $historyManager = new HistoryManager($pdo);
-    $operationManager = new OperationManager($pdo);
-    $projetManager = new ProjetManager($pdo);
-    $clientManager = new ClientManager($pdo);
-    $contratManager = new ContratManager($pdo);
+    $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
+    $operationManager = new OperationManager(PDOFactory::getMysqlConnection());
+    $projetManager = new ProjetManager(PDOFactory::getMysqlConnection());
+    $clientManager = new ClientManager(PDOFactory::getMysqlConnection());
+    $contratManager = new ContratManager(PDOFactory::getMysqlConnection());
     if( $action == "add" ) {
         if( !empty($_POST['montant']) and !empty($_POST['numeroOperation']) ) {
             $reference = 'Q'.date('Ymd-his');
@@ -95,12 +85,12 @@
         $idOperation = htmlentities($_POST['idOperation']);
         if(file_exists($_FILES['urlPiece']['tmp_name']) || is_uploaded_file($_FILES['urlPiece']['tmp_name'])) {
             $url = imageProcessing($_FILES['urlPiece'], '/pieces/pieces_reglements/');
-            $operationManager = new OperationManager($pdo);
+            $operationManager = new OperationManager(PDOFactory::getMysqlConnection());
             $operationManager->updatePiece($idOperation, $url);
             $actionMessage = "<strong>Opération valide : </strong>La pièce de réglement est modifiée avec succès.";
             $typeMessage = "success";
             //add history data to db
-            $historyManager = new HistoryManager($pdo);
+            $historyManager = new HistoryManager(PDOFactory::getMysqlConnection());
             $createdBy = $_SESSION['userMerlaTrav']->login();
             $created = date('Y-m-d h:i:s');
             $history = new History(array(

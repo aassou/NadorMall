@@ -1,15 +1,5 @@
-<?php
-    //classes loading begin
-    function classLoad ($myClass) {
-        if(file_exists('../model/'.$myClass.'.php')){
-            include('../model/'.$myClass.'.php');
-        }
-        elseif(file_exists('../controller/'.$myClass.'.php')){
-            include('../controller/'.$myClass.'.php');
-        }
-    }
-    spl_autoload_register("classLoad"); 
-    include('../db/dbconf.php');
+<?php 
+    include('../app/classLoad.php');
 	include('../lib/image-processing.php');  
     //classes loading end
     session_start();
@@ -25,7 +15,7 @@
 		$salaire = new EmployeSocieteSalaire(array('id' => $idSalaire, 'salaire' => $salaire, 'prime' => $prime, 
 		'dateOperation' => $dateOperation ));
 		//create class manager
-        $salaireManager = new EmployeSocieteSalaireManager($pdo);
+        $salaireManager = new EmployeSocieteSalaireManager(PDOFactory::getMysqlConnection());
         $salaireManager->update($salaire);
 		$_SESSION['salaire-update-success'] = "<strong>Opération valide : </strong>Les infos du salaire sont modifiées avec succès.";
 		header('Location:../employe-societe-profile.php?idEmploye='.$idEmploye);

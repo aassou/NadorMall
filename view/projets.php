@@ -201,7 +201,7 @@
         </div>
     </div>
     <?php include('../include/footer.php') ?>
-    <?php include('../include/.php') ?>
+    <?php include('../include/scripts.php') ?>
     <script>jQuery(document).ready(function() { App.init(); });
         var todosToday = <?= json_encode($todosToday); ?>;
         var todosTodayInformation = <?= json_encode($todosTodayInformation); ?>;

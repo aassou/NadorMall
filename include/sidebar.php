@@ -138,7 +138,7 @@
                     } 
                 ?> 
                 <li class="<?= $gestionLivraisonClass; ?>">
-                    <a href="javascript:;">
+                    <a href="livraisons-group.php">
                     <i class="icon-truck"></i> 
                     <span class="title">Gestion Livraisons</span>
                     </a>
@@ -156,7 +156,7 @@
                     } 
                 ?> 
                 <li class="<?= $gestionCaisseClass; ?>">
-                    <a href="javascript:;">
+                    <a href="caisse-group.php">
                     <i class="icon-money"></i> 
                     <span class="title">Gestion Caisses</span>
                     </a>
